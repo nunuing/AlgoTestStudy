@@ -33,7 +33,7 @@ public class Q11054 {
             }
 
             int temp = forward[i] + backward[i] - 1;
-            answer = temp > answer ? temp : answer;
+            answer = Math.max(temp, answer);
         }
 
         System.out.println(answer);
