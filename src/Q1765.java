@@ -5,9 +5,13 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Q1765 {
-    static String[] data, result;
+    static char[] data, result;
     static boolean[] isPicked;
     static int l, c;
+                      // {a, b, c, b, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z}
+    static int[] moums = {1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 };
+    static int[] jaums = {0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 };
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -15,32 +19,45 @@ public class Q1765 {
         l = Integer.parseInt(st.nextToken());
         c = Integer.parseInt(st.nextToken());
 
-        String input = br.readLine();
-        data = input.split(" ");
-
+        char[] input = br.readLine().toCharArray();
+        data = new char[c];
+        int j = 0;
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] != ' ') {
+                data[j++] = input[i];
+            }
+        }
         Arrays.sort(data);
-        
-        result = new String[l];
+
+        result = new char[l];
         isPicked = new boolean[c];
-        for(int i = 0; i < c; i++)
+        for (int i = 0; i < c; i++)
             isPicked[i] = false;
-        
+
         picking(0, 0);
 
     }
-    static void picking(int cnt, int now){
-        if(cnt == l){
-            for(int i = 0; i < l; i++){
-                System.out.print(result[i]);
+
+    static void picking(int cnt, int now) {
+        if (cnt == l) {
+            int moum = 0, jaum = 0;
+            for (int i = 0; i < l; i++) {
+                moum += moums[result[i] - 'a'];
+                jaum += jaums[result[i] - 'a'];
             }
-            System.out.println();
+            if (moum >= 1 && jaum >= 2) {
+                for (int i = 0; i < l; i++) {
+                    System.out.print(result[i]);
+                }
+                System.out.println();
+            }
             return;
         }
-        for(int i = now; i < c; i++){
-            if(!isPicked[i]){
+        for (int i = now; i < c; i++) {
+            if (!isPicked[i]) {
                 isPicked[i] = true;
                 result[cnt] = data[i];
-                picking(cnt + 1, now + 1);
+                picking(cnt + 1,i + 1);
                 isPicked[i] = false;
             }
         }
