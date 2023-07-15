@@ -24,7 +24,6 @@ public class Q10974 {
         bw.flush();
         bw.close();
     }
-
     static void picking(int cnt) throws IOException {
         if (cnt == n) {
             for (int i = 0; i < n; i++) {
