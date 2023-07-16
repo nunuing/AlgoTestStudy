@@ -25,6 +25,7 @@ public class Q2529 {
 
         picked = new boolean[10];
         Arrays.fill(picked, false);
+
         result = new int[n + 1];
         answer = new int[2][n + 1];
         isFirst = true;
