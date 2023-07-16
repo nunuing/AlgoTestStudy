@@ -33,7 +33,6 @@ public class Q1765 {
         isPicked = new boolean[c];
         for (int i = 0; i < c; i++)
             isPicked[i] = false;
-
         picking(0, 0);
 
     }
