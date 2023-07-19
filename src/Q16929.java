@@ -46,12 +46,12 @@ public class Q16929 {
         for (int i = 0; i < mx.length; i++) {
             int dx = now.x + mx[i];
             int dy = now.y + my[i];
-            if ((dx >= 0 && dx < n) && (dy >= 0 && dy < m) && (board[first.x][first.y] == board[dx][dy])) {
+            if ((dx >= 0 && dx < n) && (dy >= 0 && dy < m) && (board[now.x][now.y] == board[dx][dy])) {
                 if (!visited[dx][dy]) {
                     visited[dx][dy] = true;
                     dfs(new Pair(dx, dy), level + 1);
                 } else {
-                    if (level >= 4 && (first.x == now.x) && (first.y == now.y)) {
+                    if (level >= 4 && (first.x == dx) && (first.y == dy)) {
                         check = true;
                         return;
                     }
