@@ -20,7 +20,6 @@ public class Q2146 {
                 map[i][j] =  Integer.parseInt(st.nextToken()) == 1 ? true : false;
             }
         }
-
         land = new int[n][n];
 
     }
