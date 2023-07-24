@@ -21,6 +21,7 @@ public class Q2146 {
             }
         }
         land = new int[n][n];
+
         br.close();
     }
     static class Pair {
