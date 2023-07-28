@@ -6,17 +6,19 @@ import java.util.StringTokenizer;
 
 public class Q2250 {
     static Node[] tree;
-    static LinkedList<Integer>[] levels;
-    static int maxHeight;
+    static int maxHeight, cnt;
+    static int[] maxLevel, minLevel;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
         tree = new Node[n + 1];
-        levels = new LinkedList[n + 1];
+        maxLevel = new int[n + 1];
+        minLevel = new int[n + 1];
         for (int i = 1; i <= n; i++) {
             tree[i] = new Node(i);
-            levels[i] = new LinkedList<>();
+            maxLevel[i] = 0;
+            minLevel[i] = n + 1;
         }
 
         StringTokenizer st;
@@ -46,14 +48,14 @@ public class Q2250 {
         }
 
         maxHeight = 0;
+        cnt = 1;
         inorder(root, 1);
 
-        int answer = maxHeight;
-        int diff = 0;
-        for (int i = maxHeight - 1; i >= 1; i--){
-            int size = levels[i].size();
-            int temp = levels[i].get(size - 1) - levels[i].get(0) + 1;
-            if (diff <= temp){
+        int answer = 1;
+        int diff = maxLevel[answer] - minLevel[answer] + 1;
+        for (int i = 2; i <= maxHeight; i++){
+            int temp = maxLevel[i] - minLevel[i] + 1;
+            if (diff < temp){
                 answer = i;
                 diff = temp;
             }
@@ -65,7 +67,9 @@ public class Q2250 {
             inorder(tree[now].left, height + 1);
         }
         maxHeight = maxHeight >= height ? maxHeight : height;
-        levels[height].add(now);
+        minLevel[height] = Math.min(minLevel[height], cnt);
+        maxLevel[height] = cnt;
+        cnt++;
         if(tree[now].right != -1){
             inorder(tree[now].right, height + 1);
         }
