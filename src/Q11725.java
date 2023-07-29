@@ -28,6 +28,7 @@ public class Q11725 {
 
         parents = new int[n + 1];
         Arrays.fill(parents, -1);
+
         visit(1);
 
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
