@@ -4,7 +4,6 @@ import java.util.StringTokenizer;
 public class Q14888 {
     static int n, minSum, maxSum;
     static int[] inputs, cal, chosen;
-    static boolean first;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -23,7 +22,8 @@ public class Q14888 {
         }
         br.close();
 
-        first = true;
+        minSum = Integer.MAX_VALUE;
+        maxSum = Integer.MIN_VALUE;
         chosen = new int[n];
         choose(1);
 
@@ -55,15 +55,8 @@ public class Q14888 {
                     }
                 }
             }
-            if (first) {
-                maxSum = sum;
-                minSum = sum;
-                first = false;
-            }
-            else {
                 minSum = minSum < sum ? minSum : sum;
                 maxSum = maxSum > sum ? maxSum : sum;
-            }
             return;
         }
         for (int i = 0; i < cal.length; i++) {
