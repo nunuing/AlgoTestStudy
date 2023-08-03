@@ -50,16 +50,20 @@ public class Q16197 {
                 Pair temp1 = new Pair(now[0].x + mx[i], now[0].y + my[i]);
                 Pair temp2 = new Pair(now[1].x + mx[i], now[1].y + my[i]);
 
-                if (temp1.x < 0 || temp1.x >= n || temp1.y < 0 || temp1.y >= m) {
+                boolean check1 = (temp1.x < 0 || temp1.x >= n || temp1.y < 0 || temp1.y >= m) ? true : false;
+                boolean check2 = (temp2.x < 0 || temp2.x >= n || temp2.y < 0 || temp2.y >= m) ? true : false;
+                if (check1 && !check2) {
                     flag = true;
                     answer = visited[now[0].x][now[0].y][now[1].x][now[1].y];
                     break;
                 }
-                else if (temp2.x < 0 || temp2.x >= n || temp2.y < 0 || temp2.y >= m) {
+                else if (!check1 && check2) {
                     flag = true;
                     answer = visited[now[0].x][now[0].y][now[1].x][now[1].y];
                     break;
                 }
+                else if (check1 && check2)
+                    continue;
 
                 if (board[temp1.x][temp1.y] == '#')
                     temp1 = now[0];
