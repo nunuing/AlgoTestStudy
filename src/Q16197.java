@@ -42,7 +42,7 @@ public class Q16197 {
         int answer = 1;
         while (!queue.isEmpty()) {
             now = queue.poll();
-            if (visited[now[0].x][now[0].y][now[1].x][now[1].y] > 11){
+            if (visited[now[0].x][now[0].y][now[1].x][now[1].y] >= 11){
                 break;
             }
 
@@ -67,7 +67,7 @@ public class Q16197 {
 
                 if (board[temp1.x][temp1.y] == '#')
                     temp1 = now[0];
-                else if (board[temp2.x][temp2.y] == '#')
+                if (board[temp2.x][temp2.y] == '#')
                     temp2 = now[0];
 
                 if (visited[temp1.x][temp1.y][temp2.x][temp2.y] == 0) {
