@@ -29,6 +29,7 @@ public class Q16197 {
                 }
             }
         }
+        br.close();
 
         int[] mx = {1, -1, 0, 0};
         int[] my = {0, 0, 1, -1};
