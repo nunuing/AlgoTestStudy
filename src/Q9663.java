@@ -13,6 +13,7 @@ public class Q9663 {
 
         board = new int[n];
         nQueen(0);
+
         System.out.println(cnt);
     }
     static void nQueen(int depth) {
