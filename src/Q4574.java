@@ -1,108 +1,71 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Q4574 {
-    static int n, pcnt;
-    static BufferedReader br;
-    static StringBuilder sb;
-    static boolean isDone;
-    static int[][] board;
+    static int n, m;
+    static int[] num;        //숫자의 루트노드 저장 배열
+    static StringBuilder sb = new StringBuilder();    //결과 StringBuilder
+
     public static void main(String[] args) throws IOException {
-        br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuilder();
-        StringTokenizer st;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));           //입력값 처리하는 BufferedReader
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));         //결과값 출력하는 BufferedWriter
 
-        n = Integer.parseInt(br.readLine());
-        pcnt = 1;
-        while (n != 0) {
-            board = new int[9][9];
-            for (int i = 0; i < n; i++) {
-                st = new StringTokenizer(br.readLine());
-                int temp1 = Integer.parseInt(st.nextToken());
-                char[] pos1 = st.nextToken().toCharArray();
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        num = new int[n + 1];                                                               //0 ~ (n + 1) 집합 루트노드 설정
 
-                int temp2 = Integer.parseInt(st.nextToken());
-                char[] pos2 = st.nextToken().toCharArray();
+        for (int i = 0; i <= n; i++)
+            num[i] = i;
 
-                int px = pos1[0] - 'A';
-                int py = pos1[1] - '1';
-                board[px][py] = temp1;
+        //명령어 수행
+        for (int i = 0; i < m; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
 
-                px = pos2[0] - 'A';
-                py = pos2[1] - '1';
-                board[px][py] = temp2;
-            }
+            int command = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
 
-            st = new StringTokenizer(br.readLine());
-            for (int i = 1; i < 10; i++) {
-                char[] pos = st.nextToken().toCharArray();
-
-                int px = pos[0] - 'A';
-                int py = pos[1] - '1';
-
-                board[px][py] = i;
-            }
-
-            isDone = false;
-            sudoku(0, 0);
-
-            n = Integer.parseInt(br.readLine());
-            pcnt++;
+            if (command == 0)    //0, 합집합
+                union(a, b);
+            else        //1, 교집합
+                isCheck(a, b);
         }
+
+        bw.write(sb.toString());        //결과 BufferedWriter 저장
+        bw.flush();        //결과 출력
+        bw.close();
         br.close();
-        System.out.print(sb);
     }
-    static void sudoku (int row, int col) {
-        if (col == 9) {
-            sudoku(row + 1, 0);
-            return;
-        }
-        if (row == 9) {
-            if (!isDone) {
-                sb.append("Puzzle " + pcnt + "\n");
-                for (int i = 0; i < 9; i++) {
-                    for (int j = 0; j < 9; j++) {
-                        sb.append(board[i][j]);
-                    }
-                    sb.append("\n");
-                }
-                isDone = true;
-            }
-            return;
-        }
-
-        if(board[row][col] == 0) {
-            for (int i = 1; i < 10; i++) {
-                if (possibility(row, col, i)) {
-                    board[row][col] = i;
-                    sudoku(row, col + 1);
-                }
-            }
-            board[row][col] = 0;
-            return;
-        }
-        sudoku(row, col + 1);
+    //루트 노드의 값 찾기 함수
+    static int find(int n) {
+        if (n == num[n])
+            return n;
+        return num[n] = find(num[n]);
     }
-    static boolean possibility(int col, int row, int val) {
-        for (int i = 0; i < 9; i++) {
-            if (board[i][row] == val)
-                return false;
-        }
 
-        for (int i = 0; i < 9; i++) {
-            if (board[col][i] == val)
-                return false;
-        }
+    //루트 노드 값이 더 작은 값으로 합치는 함수
+    static void union(int a, int b) {
+        int x = find(a);
+        int y = find(b);
 
-        int t_col = (col / 3) * 3;
-        int t_row = (row / 3) * 3;
-        for (int i = t_col; i < t_col + 3; i++) {
-            for (int j = t_row; j < t_row + 3; j++) {
-                if (board[i][j] == val)
-                    return false;
-            }
+        if (x != y) {
+            if (x > y)
+                num[y] = x;
+            else
+                num[x] = y;
         }
+        return;
+    }
 
-        return true;
+    //두 집합의 루트노드가 같은지 확인하는 함수
+    static void isCheck(int a, int b) {
+        int x = find(a);
+        int y = find(b);
+        if (x == y)
+            sb.append("YES\n");
+        else
+            sb.append("NO\n");
+        return;
     }
 }
