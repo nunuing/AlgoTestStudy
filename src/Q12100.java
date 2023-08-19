@@ -20,9 +20,10 @@ public class Q12100 {
                 board[i][j] = new Block(val);
             }
         }
-
         br.close();
+
         move(0);
+
         System.out.println(answer);
     }
     static class Block {
