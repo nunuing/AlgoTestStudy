@@ -23,7 +23,6 @@ public class Q12100 {
         br.close();
 
         move(0);
-
         System.out.println(answer);
     }
     static class Block {
@@ -55,30 +54,30 @@ public class Q12100 {
         for (int i = 0; i < 4; i++) {
             if (i == 0) {           //상
                 for (int ty = 0; ty < n; ty++) {
-                    int tx = n - 1;
-                    int cx = tx - 1;
-                    while (tx > 0 && cx >= 0) {
+                    int tx = 0;
+                    int cx = tx + 1;
+                    while (tx < n && cx < n) {
                         //합쳐저야되는 경우
                         if ((!board[tx][ty].isUsed && !board[cx][ty].isUsed) && (board[tx][ty].val == board[cx][ty].val)) {
-                            board[tx][ty].val = 0;
+                            board[cx][ty].val = 0;
 
-                            board[cx][ty].val *= 2;
-                            board[cx][ty].isUsed = true;
+                            board[tx][ty].val *= 2;
+                            board[ty][ty].isUsed = true;
                         }
                         else if (board[cx][ty].val == 0){
-                            cx--;
+                            cx++;
                             continue;
                         }
-                        tx = cx;
-                        cx = tx - 1;
+                        tx++;
+                        cx = tx + 1;
                     }
                 }
             }
             else if (i == 1) {      //하
                 for (int ty = 0; ty < n; ty++) {
-                    int tx = 0;
-                    int cx = tx + 1;
-                    while (tx < n - 1 && cx < n) {
+                    int tx = n - 1;
+                    int cx = tx - 1;
+                    while (tx >= 0 && cx >= 0   ) {
                         //합쳐저야되는 경우
                         if ((!board[tx][ty].isUsed && !board[cx][ty].isUsed) && (board[tx][ty].val == board[cx][ty].val)) {
                             board[tx][ty].val = 0;
