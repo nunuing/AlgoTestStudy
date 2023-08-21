@@ -23,6 +23,7 @@ public class Q12100 {
         br.close();
 
         move(0);
+
         System.out.println(answer);
     }
     static class Block {
