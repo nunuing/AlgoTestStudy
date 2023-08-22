@@ -23,7 +23,6 @@ public class Q12100 {
         br.close();
 
         move(0);
-
         System.out.println(answer);
     }
     static class Block {
@@ -53,7 +52,7 @@ public class Q12100 {
             return;
 
         for (int i = 0; i < 4; i++) {
-            if (i == 0) {           //상
+            if (i == 0) {                               //상
                 for (int ty = 0; ty < n; ty++) {
                     int tx = 0;
                     int cx = tx + 1;
@@ -74,7 +73,7 @@ public class Q12100 {
                     }
                 }
             }
-            else if (i == 1) {      //하
+            else if (i == 1) {                          //하
                 for (int ty = 0; ty < n; ty++) {
                     int tx = n - 1;
                     int cx = tx - 1;
@@ -95,7 +94,7 @@ public class Q12100 {
                     }
                 }
             }
-            else if (i == 2) {           //좌
+            else if (i == 2) {                          //좌
                 for (int tx = 0; tx < n; tx++) {
                     int ty = n - 1;
                     int cy = ty - 1;
@@ -116,7 +115,7 @@ public class Q12100 {
                     }
                 }
             }
-            else if (i == 3) {      //우
+            else if (i == 3) {                          //우
                 for (int tx = 0; tx < n; tx++) {
                     int ty = 0;
                     int cy = ty + 1;
