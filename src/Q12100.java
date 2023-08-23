@@ -1,142 +1,176 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Q12100 {
-    static int n, answer = 0;
-    static Block[][] board;
+
+    static int N;
+    static int[][] map; // 원본 배열
+
+    static int[] swipeArr; // 백트래킹에서 swipe 명령 조합할 배열
+
+    static int max = 0; // 구할 최댓값
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        n = Integer.parseInt(br.readLine());
-
-        board = new Block[n][n];
         StringTokenizer st;
-        for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < n; j++) {
-                int val = Integer.parseInt(st.nextToken());
-                board[i][j] = new Block(val);
+
+        N = Integer.parseInt(br.readLine());
+
+        map = new int[N][N];
+        for(int i=0; i<N; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            for(int j=0; j<N; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        br.close();
 
-        move(0);
-        System.out.println(answer);
+        swipeArr = new int[5]; // 백트래킹에서 swipe 명령 조합할 배열
+
+        bt(0); // 백트래킹 시작
+
+        System.out.println(max);
     }
-    static class Block {
-        public int val;
-        public boolean isUsed = false;
-        public Block(int val) {
-            this.val = val;
-        }
-        public Block(int val, boolean isUsed) {
-            this.val = val;
-            this.isUsed = isUsed;
-        }
-    }
-    static void move(int depth) {
-        if (depth > 0 && depth <= 5) {
-            int maxVal = 0;
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (board[i][j].val > maxVal)
-                        maxVal = board[i][j].val;
+
+    static void bt(int depth) {
+        // 명령을 5번 수행한 뒤 종료
+        if(depth == 5) {
+            // deep-copy
+            int[][] newMap = new int[N][N];
+            for(int i=0; i<N; i++) {
+                for(int j=0; j<N; j++) {
+                    newMap[i][j] = map[i][j];
                 }
             }
-            if (answer < maxVal)
-                answer = maxVal;
-        }
-        else if(depth > 5)
+            // 조합된 명령을 순서대로 수행하며 배열 갱신
+            for(int i=0; i<5; i++) {
+                int s = swipeArr[i];
+                newMap = swipeAll(s, newMap);
+            }
+            // 모든 명령이 종료된 후 가장 큰 블록값 구하기
+            int num = 0;
+            for(int i=0; i<N; i++) {
+                for(int j=0; j<N; j++) {
+                    num = Math.max(num, newMap[i][j]);
+                }
+            }
+
+            // 최댓값 구하기
+            max = Math.max(max, num);
+
             return;
+        }
 
-        for (int i = 0; i < 4; i++) {
-            if (i == 0) {                               //상
-                for (int ty = 0; ty < n; ty++) {
-                    int tx = 0;
-                    int cx = tx + 1;
-                    while (tx < n && cx < n) {
-                        //합쳐저야되는 경우
-                        if ((!board[tx][ty].isUsed && !board[cx][ty].isUsed) && (board[tx][ty].val == board[cx][ty].val)) {
-                            board[cx][ty].val = 0;
-
-                            board[tx][ty].val *= 2;
-                            board[ty][ty].isUsed = true;
-                        }
-                        else if (board[cx][ty].val == 0){
-                            cx++;
-                            continue;
-                        }
-                        tx++;
-                        cx = tx + 1;
-                    }
-                }
-            }
-            else if (i == 1) {                          //하
-                for (int ty = 0; ty < n; ty++) {
-                    int tx = n - 1;
-                    int cx = tx - 1;
-                    while (tx >= 0 && cx >= 0   ) {
-                        //합쳐저야되는 경우
-                        if ((!board[tx][ty].isUsed && !board[cx][ty].isUsed) && (board[tx][ty].val == board[cx][ty].val)) {
-                            board[tx][ty].val = 0;
-
-                            board[cx][ty].val *= 2;
-                            board[cx][ty].isUsed = true;
-                        }
-                        else if (board[cx][ty].val == 0){
-                            cx++;
-                            continue;
-                        }
-                        tx = cx;
-                        cx = tx + 1;
-                    }
-                }
-            }
-            else if (i == 2) {                          //좌
-                for (int tx = 0; tx < n; tx++) {
-                    int ty = n - 1;
-                    int cy = ty - 1;
-                    while (ty > 0 && cy >= 0) {
-                        //합쳐저야되는 경우
-                        if ((!board[tx][ty].isUsed && !board[tx][cy].isUsed) && (board[tx][ty].val == board[tx][cy].val)) {
-                            board[tx][ty].val = 0;
-
-                            board[tx][cy].val *= 2;
-                            board[tx][cy].isUsed = true;
-                        }
-                        else if (board[tx][cy].val == 0) {
-                            cy--;
-                            continue;
-                        }
-                        ty = cy;
-                        cy = ty - 1;
-                    }
-                }
-            }
-            else if (i == 3) {                          //우
-                for (int tx = 0; tx < n; tx++) {
-                    int ty = 0;
-                    int cy = ty + 1;
-                    while (ty < n - 1 && cy < n) {
-                        //합쳐저야되는 경우
-                        if ((!board[tx][ty].isUsed && !board[tx][ty + 1].isUsed) && (board[tx][ty].val == board[tx][ty + 1].val)) {
-                            board[tx][ty].val = 0;
-
-                            board[tx][ty + 1].val *= 2;
-                            board[tx][ty + 1].isUsed = true;
-                        }
-                        else if (board[tx][cy].val == 0) {
-                            cy++;
-                            continue;
-                        }
-                        ty = cy;
-                        cy = ty - 1;
-                    }
-                }
-            }
-            move(depth + 1);
+        // 상 하 좌 우 스와이프 조합 구하기
+        for(int i=0; i<4; i++) {
+            swipeArr[depth] = i;
+            bt(depth + 1);
         }
     }
+
+    static int[][] swipeAll(int s, int[][] newMap) {
+
+        switch(s) {
+            // 상
+            case 0:
+                for(int i = 0; i < N; i++) {
+                    int index = 0; // 값을 넣을 위치
+                    int block = 0; // 최근 블록의 값
+                    for(int j = 0; j < N; j++) {
+                        // 현재 블록의 값이 0이 아니라면
+                        if(newMap[j][i] != 0) {
+                            // 최근 블록의 값과 현재 블록의 값이 같다면
+                            if(block == newMap[j][i]) {
+                                // 블록이 합쳐진다
+                                newMap[index - 1][i] = block * 2;
+                                // 블록이 합쳐졌으므로 0으로 갱신
+                                block = 0;
+                                // 값을 합쳤으므로 현재 블록의 값을 0으로 갱신
+                                newMap[j][i] = 0;
+                            }
+                            // 최근 블록의 값과 현재 블록의 값이 다르다면
+                            else {
+                                // 블록 변수의 값을 현재 블록의 값으로 갱신
+                                block = newMap[j][i];
+                                // 현재 블록의 값을 0으로 바꿔줌
+                                newMap[j][i] = 0;
+                                // 값을 넣을 위치에 최근 블록의 값을 넣음
+                                newMap[index][i] = block;
+                                // 값을 넣을 위치 +1
+                                index++;
+                            }
+                        }
+                    }
+                }
+                break;
+            // 하
+            case 1:
+                for(int i = 0; i < N; i++) {
+                    int index = N - 1;
+                    int block = 0;
+                    for(int j = N - 1; j >= 0; j--) {
+                        if(newMap[j][i] != 0) {
+                            if(block == newMap[j][i]) {
+                                newMap[index + 1][i] = block * 2;
+                                block = 0;
+                                newMap[j][i] = 0;
+                            }
+                            else {
+                                block = newMap[j][i];
+                                newMap[j][i] = 0;
+                                newMap[index][i] = block;
+                                index--;
+                            }
+                        }
+                    }
+                }
+                break;
+            // 좌
+            case 2:
+                for(int i = 0; i < N; i++) {
+                    int index = 0;
+                    int block = 0;
+                    for(int j = 0; j < N; j++) {
+                        if(newMap[i][j] != 0) {
+                            if(block == newMap[i][j]) {
+                                newMap[i][index - 1] = block * 2;
+                                block = 0;
+                                newMap[i][j] = 0;
+                            }
+                            else {
+                                block = newMap[i][j];
+                                newMap[i][j] = 0;
+                                newMap[i][index] = block;
+                                index++;
+                            }
+                        }
+                    }
+                }
+                break;
+            // 우
+            case 3:
+                for(int i = 0; i < N; i++) {
+                    int index = N - 1;
+                    int block = 0;
+                    for(int j = N - 1; j >= 0; j--) {
+                        if(newMap[i][j] != 0) {
+                            if(block == newMap[i][j]) {
+                                newMap[i][index + 1] = block * 2;
+                                block = 0;
+                                newMap[i][j] = 0;
+                            }
+                            else {
+                                block = newMap[i][j];
+                                newMap[i][j] = 0;
+                                newMap[i][index] = block;
+                                index--;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        // 명령을 수행한 후의 배열 상태를 반환한다.
+        return newMap;
+    }
+
 }
