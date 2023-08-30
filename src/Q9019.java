@@ -17,7 +17,9 @@ public class Q9019 {
 
             Queue<Integer> queue = new LinkedList<>();
             while (!queue.isEmpty()) {
-
+                if (a == b) {
+                    break;
+                }
             }
         }
 
