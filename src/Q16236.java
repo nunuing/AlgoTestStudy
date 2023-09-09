@@ -24,7 +24,6 @@ public class Q16236 {
                 }
             }
         }
-
         PriorityQueue<Pair> fishes = new PriorityQueue<>(new Comparator<Pair>() {
             @Override
             public int compare(Pair o1, Pair o2) {
