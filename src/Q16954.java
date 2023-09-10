@@ -1,10 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Parameter;
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class Q16954 {
     static final int SIZE = 8;
     static int[] mx = {0, 0, -1, 1, -1, -1, 1, 1, 0};
