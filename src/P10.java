@@ -8,7 +8,7 @@ public class P10 {
     }
 
     static public int[] solution(int[] fees, String[] records) {
-        HashMap<String, Time> hm = new HashMap<>();
+        HashMap<String, Car> hm = new HashMap<>();
 
         for (int i = 0; i < records.length; i++) {
             String[] info = records[i].split(" ");
@@ -18,54 +18,74 @@ public class P10 {
             int m = Integer.parseInt(time[1]);
             if (info[2].equals("IN")) {
                 if (!hm.containsKey(info[1])){
-                    hm.put(info[1], new Time(h, m));
+                    hm.put(info[1], new Car(info[1], h, m));
                 }
                 else {
-                    Time t = hm.remove(info[1]);
-                    hm.put(info[1], new Time(h, m, t.acc, false));
+                    Car t = hm.remove(info[1]);
+                    hm.put(info[1], new Car(info[1], h, m, t.acc, false));
                 }
             } else if (info[2].equals("OUT")) {
-                Time in = hm.remove(info[1]);
-                Time out = new Time(h, m);
-                hm.put(info[1], new Time(h, m, in.minus(out), true));
+                Car in = hm.remove(info[1]);
+                hm.put(info[1], new Car(info[1], h, m, in.acc + in.minus(h, m), true));
             }
         }
 
-
+        List<Car> list = new ArrayList<>();
+        for (String str : hm.keySet()) {
+            Car c = hm.get(str);
+            if (!hm.get(str).isOut) {
+                list.add(new Car(c.carNumber, c.hour, c.minute, c.acc + c.minus(23, 59), true));
+            }
+            else {
+                list.add(c);
+            }
+        }
+        Collections.sort(list);
         int[] answer = new int[hm.size()];
-
+        for (int i = 0; i < answer.length; i++) {
+            answer[i] = calCost(fees, list.get(i).acc);
+        }
         return answer;
     }
 
-    static class Time {
+    static class Car implements Comparable<Car>{
+        String carNumber;
         public int hour;
         public int minute;
         public int acc = 0;
         public boolean isOut = false;
 
-        public Time(int hour, int minute) {
+        public Car(String carNumber, int hour, int minute) {
+            this.carNumber = carNumber;
             this.hour = hour;
             this.minute = minute;
         }
-        public Time(int hour, int minute, int acc, boolean isOut) {
+        public Car(String carNumber, int hour, int minute, int acc, boolean isOut) {
+            this.carNumber = carNumber;
             this.hour = hour;
             this.minute = minute;
             this.acc = acc;
             this.isOut = isOut;
         }
 
-        public int minus(Time t) {
-            Time result = new Time(0, 0);
-            if (t.minute >= this.minute) {
-                result.minute = t.minute - this.minute;
-            } else if (t.minute < this.minute) {
-                t.hour--;
-                t.minute += 60;
-                result.minute = t.minute - this.minute;
+        public int minus(int th, int tm) {
+            int hour = 0;
+            int minute = 0;
+            if (tm >= this.minute) {
+                minute = tm - this.minute;
+            } else if (tm < this.minute) {
+                th--;
+                tm += 60;
+                minute = tm - this.minute;
             }
-            result.hour = t.hour - this.hour;
+            hour = th - this.hour;
 
-            return result.hour * 60 + result.minute;
+            return hour * 60 + minute;
+        }
+
+        @Override
+        public int compareTo(Car o) {
+            return this.carNumber.compareTo(o.carNumber);
         }
     }
 
@@ -86,4 +106,5 @@ public class P10 {
         }
         return answer;
     }
+
 }
