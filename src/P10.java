@@ -77,9 +77,11 @@ public class P10 {
         } else {
             answer += fees[1];
             time -= fees[0];
-            while (time > 0) {
-                time -= fees[2];
-                answer += fees[3];
+            if (time % fees[2] == 0) {
+                answer += (time / fees[2]) * fees[3];
+            }
+            else {
+                answer += (time / fees[2] + 1) * fees[3];
             }
         }
         return answer;
