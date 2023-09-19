@@ -36,7 +36,6 @@ public class Q3190 {
 		Queue<Pair> queue = new LinkedList<>();
 		Pair head = new Pair(1, 1);
 		Pair tail = new Pair(1, 1);
-		queue.offer(head);
 		board[head.x][head.y] = 2;
 		
 		int[] mx = {0, 1, 0, -1};
@@ -53,14 +52,13 @@ public class Q3190 {
 				break;
 			if (board[nx][ny] == 2)		//자기자신의 몸과 부딪힘 
 				break;
-			
-			if (board[nx][ny] == 0) {		//사과가 아님
-				tail = queue.poll();
-				board[tail.x][tail.y] = 0;
-			}
-			
+
 			head = new Pair(nx, ny);
 			queue.offer(head);
+			if (board[nx][ny] == 0) {		//사과가 아님
+				board[tail.x][tail.y] = 0;
+				tail = queue.poll();
+			}
 			board[head.x][head.y] = 2;
 			
 			if (cur < l && change[cur][0] == sec) {

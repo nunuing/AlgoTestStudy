@@ -20,7 +20,6 @@ public class Q14503 {
 				map[i][j] = c == '0' ? false : true;
 			}
 		}
-		System.out.println("어렵다");
 	}
 
 }
