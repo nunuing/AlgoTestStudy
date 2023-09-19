@@ -21,7 +21,6 @@ public class Q14503 {
 			}
 		}
 		
-		System.out.println(map[n - 1][m - 1]);
 	}
 
 }
