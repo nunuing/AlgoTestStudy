@@ -55,7 +55,7 @@ public class Q14891 {
         if (rCheck) {
             if (num + 1 > 4) {
                 rCheck = false;
-            } else if (cWheels[num][2] == cWheels[num][6]) {
+            } else if (cWheels[num][2] == cWheels[num + 1][6]) {
                 rCheck = false;
             }
         }
