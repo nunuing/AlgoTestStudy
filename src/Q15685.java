@@ -1,24 +1,27 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Q15685 {
+    static boolean[][] map;
+    static int n;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine());
-        boolean[][] map = new boolean[101][101];
+        n = Integer.parseInt(br.readLine());
+        map = new boolean[101][101];
 
         StringTokenizer st;
-        int[] mx = {}
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
             int d = Integer.parseInt(st.nextToken());
             int g = Integer.parseInt(st.nextToken());
-
+            travel(x, y, d, g);
         }
 
         int[] sx = {0, 1, 0, 1};
@@ -39,5 +42,23 @@ public class Q15685 {
             }
         }
         System.out.println(cnt);
+    }
+    static void travel (int x, int y, int d, int g) {
+        List<Integer> list = new ArrayList<>();
+        list.add(d);
+        for (int i = 1; i <= g; i++) {
+            for (int j = list.size() - 1; j >= 0; j--) {
+                list.add((list.get(j) + 1) % 4);
+            }
+        }
+
+        int[] mx = {1, 0, -1, 0};
+        int[] my = {0, -1, 0, 1};
+        map[y][x] = true;
+        for (Integer dir  : list) {
+            y += my[dir];
+            x += mx[dir];
+            map[y][x] = true;
+        }
     }
 }
