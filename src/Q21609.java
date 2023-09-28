@@ -24,7 +24,6 @@ public class Q21609 {
             }
         }
         group = new int[n][n];
-
     }
     static void grouping (int num, Pair str) {
         Queue<Pair> q = new LinkedList<>();
