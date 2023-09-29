@@ -1,14 +1,12 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Q21609 {
     static int[][] group, map;
     static int n;
+    static PriorityQueue<Group> groups = new PriorityQueue<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -24,6 +22,39 @@ public class Q21609 {
             }
         }
         group = new int[n][n];
+        int g_cnt = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (group[i][j] == 0 && map[i][j] != -1 && map[i][j] != 0) {
+                    grouping(g_cnt++, new Pair(j, i));
+                }
+            }
+        }
+
+        int score = 0;
+        while (!groups.isEmpty()) {
+            Group now = groups.poll();
+            score += (now.cnt * now.cnt);
+
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (group[i][j] == now.num) {
+                        group[i][j] = 0;
+                        map[i][j] = -2;
+                    }
+                }
+            }
+
+            //이동
+            for (int i = n - 1; i > 0; i--) {
+                for (int j = 0; j < n; j++) {
+                    if (group[i][j] == 0 && map[i][j] == -2) {
+
+                    }
+                }
+            }
+        }
+        System.out.println(score);
     }
     static void grouping (int num, Pair str) {
         Queue<Pair> q = new LinkedList<>();
@@ -36,7 +67,7 @@ public class Q21609 {
 
         int color = map[str.y][str.x];
         int rainbow = 0;
-        int cnt = 1;
+        int normal = 1;
         while (!q.isEmpty()) {
             Pair now = q.poll();
 
@@ -49,19 +80,27 @@ public class Q21609 {
 
                 if (group[ty][tx] == 0 && (map[ty][tx] == color || map[ty][tx] == 0)) {
                     group[ty][tx] = num;
-                    cnt++;
+                    q.offer(new Pair(tx, ty));
                     if (map[ty][tx] == 0)
                         rainbow++;
+                    else
+                        normal++;
                 }
             }
         }
+
+        if (normal >= 1 && rainbow + normal >= 2) {
+            groups.offer(new Group(num, color, normal + rainbow, rainbow, str));
+        }
     }
-    static class Group implements Comparator<Group> {
+    static class Group implements Comparable<Group> {
+        public int num;
         public int color;
         public int cnt;
         public int rainbow;
         public Pair mark;
-        public Group(int color, int cnt, int rainbow, Pair mark) {
+        public Group(int num, int color, int cnt, int rainbow, Pair mark) {
+            this.num = num;
             this.color = color;
             this.cnt = cnt;
             this.rainbow = rainbow;
@@ -69,17 +108,17 @@ public class Q21609 {
         }
 
         @Override
-        public int compare(Group o1, Group o2) {
-            if (o1.cnt != o2.cnt)
-                return Integer.compare(o2.cnt, o1.cnt);
+        public int compareTo(Group o) {
+            if (this.cnt != o.cnt)
+            return Integer.compare(o.cnt, this.cnt);
 
-            if (o1.rainbow != o2.rainbow)
-                return Integer.compare(o2.rainbow,o1.rainbow);
+            if (this.rainbow != o.rainbow)
+                return Integer.compare(o.rainbow, this.rainbow);
 
-            if (o1.mark.y != o2.mark.y)
-                return Integer.compare(o2.mark.y, o2.mark.y);
+            if (this.mark.y != o.mark.y)
+                return Integer.compare(o.mark.y, this.mark.y);
 
-            return Integer.compare(o2.mark.x, o1.mark.x);
+            return Integer.compare(o.mark.x, this.mark.x);
         }
     }
     static class Pair {
