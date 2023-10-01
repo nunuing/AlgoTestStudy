@@ -21,6 +21,7 @@ public class Q21609 {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+
         group = new int[n][n];
         int g_cnt = 1;
         for (int i = 0; i < n; i++) {
