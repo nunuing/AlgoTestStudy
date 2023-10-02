@@ -31,7 +31,6 @@ public class Q21609 {
                 }
             }
         }
-
         int score = 0;
         while (!groups.isEmpty()) {
             Group now = groups.poll();
