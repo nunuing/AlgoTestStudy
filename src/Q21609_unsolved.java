@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-public class Q21609 {
+public class Q21609_unsolved {
     static int[] dx = {0, -1, 1, 0};
     static int[] dy = {-1, 0, 0, 1};
     static int n, m, ans = 0; //ans : 최종 점수
