@@ -30,8 +30,9 @@ public class Q5073 {
             else
                 bw.write(answers[1] + "\n");
         }
-        br.close();
         bw.flush();
+
+        br.close();
         bw.close();
 
     }
