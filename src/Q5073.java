@@ -20,6 +20,7 @@ public class Q5073 {
                 break;
             
             Arrays.sort(inputs);
+
             if (inputs[0] + inputs[1] <= inputs[2])
                 bw.write(answers[3] + "\n");
             else if ((inputs[0] == inputs[1]) &&(inputs[1] == inputs[2]) && (inputs[2] == inputs[0]))
