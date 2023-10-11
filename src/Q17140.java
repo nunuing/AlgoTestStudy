@@ -1,9 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Q17140 {
+    static int[][] a;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -12,10 +13,12 @@ public class Q17140 {
         int c = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
 
-        int[][] a = new int[3][3];
-        for (int i = 0; i < a.length; i++) {
+        a = new int[101][101];
+        for (int i = 1; i <= 3 ; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < a[0].length; j++) {
+            a[i][0] = 3;        //행 길이 기록
+            for (int j = 1; j <= 3; j++) {
+                a[0][j] = 3;    //열 길이 기록
                 a[i][j] = Integer.parseInt(st.nextToken());
             }
         }
@@ -31,6 +34,34 @@ public class Q17140 {
         }
         else {
             System.out.println(time);
+        }
+    }
+    static void calRow(){
+        PriorityQueue<Number> queue = new PriorityQueue<>();
+        for (int i = 1; i < a[0][1]; i++) {
+            int[] cnt = new int[101];
+            for (int j = 0; j < a[i][0]; j++) {
+                cnt[a[i][j]]++;
+            }
+        }
+    }
+    static void calCol() {
+
+    }
+    static class Number implements Comparable<Number> {
+        public int val;
+        public int cnt;
+        public Number(int val, int cnt) {
+            this.val = val;
+            this.cnt = cnt;
+        }
+
+        @Override
+        public int compareTo(Number o) {
+            if (this.cnt != o.cnt) {
+                return this.cnt - o.cnt;
+            }
+            return this.val - o.val;
         }
     }
 }
