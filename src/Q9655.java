@@ -7,7 +7,9 @@ public class Q9655 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        String[] answers = {"SK", "CY"};
-
+        if (n % 2 == 0)
+            System.out.println("CY");
+        else
+            System.out.println("SK");
     }
 }
