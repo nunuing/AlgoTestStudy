@@ -18,9 +18,9 @@ public class Q6087 {
             char[] temp = br.readLine().toCharArray();
             for (int j = 0; j < w; j++) {
                 if (temp[j] == 'C' && str == null)
-                    str = new Pair(i, j, 0, 0);
+                    str = new Pair(i, j);
                 else if (temp[j] == 'C' && str != null)
-                    dest = new Pair(i, j, 0 ,0);
+                    dest = new Pair(i, j);
                 map[i][j] = temp[j];
             }
         }
@@ -28,63 +28,34 @@ public class Q6087 {
         int[] dx = {0, -1, 0, 1};
         int[] dy = {-1, 0, 1, 0};
 
-        PriorityQueue<Pair> queue = new PriorityQueue<>();
+        Queue<Pair> queue = new LinkedList<>();
         int[][] visited = new int[h][w];
-        for (int i = 0; i < h; i++) {
-            Arrays.fill(visited[i], w * h);
-        }
 
-        int answer = (w * h) + 1;
         visited[str.x][str.y] = 0;
-        queue.offer(new Pair(str.x, str.y, 0, 5));
+        queue.offer(new Pair(str.x, str.y));
         while (!queue.isEmpty()) {
             Pair now = queue.poll();
-            if (now.x == dest.x && now.y == dest.y) {
-                answer = Math.min(answer, now.m);
-                continue;
-            }
-            if (visited[now.x][now.y] < now.m)
-                continue;
-
             for (int i = 0; i < dx.length; i++) {
-                if (now.dir != 5 && Math.abs(now.dir - i) == 2)
-                    continue;
                 int tx = now.x + dx[i];
                 int ty = now.y + dy[i];
-                if (tx < 0 || tx >= h || ty < 0 || ty >= w)
-                    continue;
-
-                int temp = now.m;
-                if (map[tx][ty] == '*')
-                    continue;
-                if (now.dir != 5 && now.dir != i) {
-                    temp++;
+                while (tx >= 0 && tx < h && ty >= 0 && ty < w && map[tx][ty] != '*') {
+                    if (visited[tx][ty] == 0) {
+                        visited[tx][ty] = visited[now.x][now.y] + 1;
+                        queue.offer(new Pair(tx, ty));
+                    }
+                    tx += dx[i];
+                    ty += dy[i];
                 }
-                if (visited[tx][ty] < temp)
-                    continue;
-
-                visited[tx][ty] = temp;
-                queue.offer(new Pair(tx, ty, temp, i));
-
             }
         }
-        System.out.println(answer);
+        System.out.println(visited[dest.x][dest.y] - 1);
     }
-    static class Pair implements Comparable<Pair>{
+    static class Pair {
         public int x;
         public int y;
-        public int m;
-        public int dir;
-        public Pair(int x, int y, int m, int dir) {
+        public Pair(int x, int y) {
             this.x = x;
             this.y = y;
-            this.m = m;
-            this.dir = dir;
-        }
-
-        @Override
-        public int compareTo(Pair o) {
-            return this.m - o.m;
         }
     }
 }
