@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Q6087 {
     public static void main(String[] args) throws IOException {
@@ -31,23 +28,26 @@ public class Q6087 {
         int[] dx = {0, -1, 0, 1};
         int[] dy = {-1, 0, 1, 0};
 
-        Queue<Pair> queue = new LinkedList<>();
+        PriorityQueue<Pair> queue = new PriorityQueue<>();
         int[][] visited = new int[h][w];
         for (int i = 0; i < h; i++) {
             Arrays.fill(visited[i], w * h);
         }
 
+        int answer = (w * h) + 1;
         visited[str.x][str.y] = 0;
         queue.offer(new Pair(str.x, str.y, 0, 5));
         while (!queue.isEmpty()) {
             Pair now = queue.poll();
             if (now.x == dest.x && now.y == dest.y) {
-                System.out.println(now.m);
-                break;
+                answer = Math.min(answer, now.m);
+                continue;
             }
+            if (visited[now.x][now.y] < now.m)
+                continue;
 
             for (int i = 0; i < dx.length; i++) {
-                if (Math.abs(now.dir - i) == 2)
+                if (now.dir != 5 && Math.abs(now.dir - i) == 2)
                     continue;
                 int tx = now.x + dx[i];
                 int ty = now.y + dy[i];
@@ -67,10 +67,10 @@ public class Q6087 {
                 queue.offer(new Pair(tx, ty, temp, i));
 
             }
-
         }
+        System.out.println(answer);
     }
-    static class Pair {
+    static class Pair implements Comparable<Pair>{
         public int x;
         public int y;
         public int m;
@@ -80,6 +80,11 @@ public class Q6087 {
             this.y = y;
             this.m = m;
             this.dir = dir;
+        }
+
+        @Override
+        public int compareTo(Pair o) {
+            return this.m - o.m;
         }
     }
 }
