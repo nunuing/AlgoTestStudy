@@ -9,9 +9,14 @@ public class P41 {
         dp[0][0] = triangle[0][0];
         for (int i = 1; i < triangle.length; i++) {
             for (int j = 0; j < triangle[i].length; j++) {
-                int left = j - 1 < 0 ? -1 : triangle[i - 1][j - 1] ;
-                int right = j + 1 >= triangle[i - 1].length ? -1 : triangle[i - 1][j + 1];
+                int left = j - 1 < 0 ? -1 : dp[i - 1][j - 1] ;
+                int right = j >= dp[i - 1].length ? -1 : dp[i - 1][j];
+
+                dp[i][j] = Math.max(left, right) + triangle[i][j];
             }
+        }
+        for (int a : dp[dp.length - 1]) {
+            answer = Math.max(a, answer);
         }
         return answer;
     }
