@@ -11,7 +11,7 @@ public class Q1806 {
         int n = Integer.parseInt(st.nextToken());
         int s = Integer.parseInt(st.nextToken());
 
-        int[] inputs = new int[n];
+        int[] inputs = new int[n + 1];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             inputs[i] = Integer.parseInt(st.nextToken());
@@ -20,8 +20,8 @@ public class Q1806 {
         int str = 0;
         int end = 0;
         int total = 0;
-        int answer = n + 1;
-        while (str < n && end < n) {
+        int answer = Integer.MAX_VALUE;
+        while (str <= n && end <= n) {
             if (total < s) {
                 total += inputs[end++];
             }
@@ -30,6 +30,6 @@ public class Q1806 {
                 total -= inputs[str++];
             }
         }
-        System.out.println(answer == n + 1 ? 0 : answer);
+        System.out.println(answer == Integer.MAX_VALUE ? 0 : answer);
     }
 }
