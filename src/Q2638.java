@@ -8,7 +8,8 @@ import java.util.StringTokenizer;
 
 public class Q2638 {
     static int n, m;
-    static boolean[][] cheese, air;
+    static int[][] cheese;
+    static boolean[][] air;
     static int[] dx = {1, -1, 0, 0};
     static int[] dy = {0, 0, 1, -1};
 
@@ -18,23 +19,28 @@ public class Q2638 {
 
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
-        cheese = new boolean[n][m];
+        cheese = new int[n][m];
+        int cheeses = 0;
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
-                cheese[i][j] = Integer.parseInt(st.nextToken()) == 1;
+                cheese[i][j] = Integer.parseInt(st.nextToken());
+                if (cheese[i][j] == 1)
+                    cheeses++;
             }
         }
 
-        air = new boolean[n][m];
-
-        int time = 1;
+        int time = 0;
         while (true) {
+            if (cheeses == 0)
+                break;
+
+            air = new boolean[n][m];
             check();
             ArrayList<int[]> list = new ArrayList<>();
-            for (int i = 1; i < n - 1; i++) {
-                for (int j = 1; j < m - 1; j++) {
-                    if (cheese[i][j]) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    if (cheese[i][j] == 1) {
                         int cnt = 0;
                         for (int k = 0; k < dx.length; k++) {
                             int tx = i + dx[k];
@@ -43,7 +49,7 @@ public class Q2638 {
                             if (tx < 0 || tx >= n || ty < 0 || ty >= m)
                                 continue;
 
-                            if (!cheese[tx][ty] && air[tx][ty]) {
+                            if (cheese[tx][ty] == 0 && air[tx][ty]) {
                                 cnt++;
                             }
                         }
@@ -53,12 +59,12 @@ public class Q2638 {
                     }
                 }
             }
-            if (list.size() == 0)
-                break;
 
             for (int[] melt : list) {
-                cheese[melt[0]][melt[1]] = false;
+                cheese[melt[0]][melt[1]] = 0;
+                cheeses--;
             }
+            time++;
         }
         System.out.println(time);
     }
@@ -75,7 +81,7 @@ public class Q2638 {
                 if (tx < 0 || tx >= n || ty < 0 || ty >= m)
                     continue;
 
-                if (!air[tx][ty] && !cheese[tx][ty]) {
+                if (cheese[tx][ty] == 0 && !air[tx][ty]) {
                     air[tx][ty] = true;
                     queue.offer(new int[]{tx, ty});
                 }
