@@ -29,7 +29,7 @@ public class Q1800 {
         }
 
         int left = 0;
-        int right = 10000000;
+        int right = 1000000;
         int answer = -1;
         while (left <= right) {
             int mid = (left + right) / 2;
@@ -45,25 +45,29 @@ public class Q1800 {
     }
 
     static boolean check(int mid) {
-        PriorityQueue<Cable> pq = new PriorityQueue<>();
-        pq.offer(new Cable(1, 0));
-        int[] visited = new int[n + 1];
-
-        Arrays.fill(visited, Integer.MAX_VALUE);
-        visited[1] = 0;
-        while (!pq.isEmpty()){
-            Cable now = pq.poll();
-            int nn = now.num;
-            int price = now.price;
-            if (visited[nn] < mid)
-                continue;
-
-            for (Cable next : computers[nn]) {
-
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[1] - o2[1];
             }
+        });
+        pq.offer(new int[]{1, 0});
+        int[] dist = new int[n + 1];
 
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[1] = 0;
+        while (!pq.isEmpty()){
+            int[] now = pq.poll();
+
+            for (Cable next : computers[now[0]]) {
+                int check = next.price <= mid ? 0 : 1;
+                if (dist[next.num] > now[1] + check){
+                    dist[next.num] = now[1] + check;
+                    pq.offer(new int[]{next.num, dist[next.num]});
+                }
+            }
         }
-        return visited[n] <= k;
+        return dist[n] <= k;
     }
     static class Cable implements Comparable<Cable> {
         public int num;
