@@ -16,7 +16,7 @@ public class Q4659 {
                 sb.append("<" + temp + "> is acceptable.\n");
             }
             else {
-                sb.append("<" + temp + "> not acceptable.\n");
+                sb.append("<" + temp + "> is not acceptable.\n");
             }
         }
         br.close();
