@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class P2503 {
+public class Q2503 {
     static int[][] hint, info;
     static int n, answer;
     static boolean[] used;
