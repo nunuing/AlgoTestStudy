@@ -10,18 +10,23 @@ public class Q12865_2 {
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
 
-        int[][] stuff = new int[n + 1][2];
+        int[] w = new int[n + 1];
+        int[] v = new int[n + 1];
         for (int i = 1; i <= n; i++) {
             st = new StringTokenizer(br.readLine());
-            stuff[i][0] = Integer.parseInt(st.nextToken());
-            stuff[i][1] = Integer.parseInt(st.nextToken());
+            w[i] = Integer.parseInt(st.nextToken());
+            v[i] = Integer.parseInt(st.nextToken());
         }
 
         int[][] dp = new int[n + 1][k + 1];
-
-        for (int i = 1; i <= n; i++) {
-
+        for (int i = 1; i <= n; i++) {      //물건 번호
+            for (int j = 0; j <= k; j++) {  //무게
+                dp[i][j] = dp[i - 1][j];
+                if (j - w[i] >= 0) {        //i번 째 물건을 담을 수 있는 경우
+                    dp[i][j] =  Math.max(dp[i][j], dp[i - 1][j - w[i]] + v[i]);
+                }
+            }
         }
-
+        System.out.println(dp[n][k]);
     }
 }
