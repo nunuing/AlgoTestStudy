@@ -17,7 +17,7 @@ public class Q15683 {
         m = Integer.parseInt(st.nextToken());
         map = new int[n][m];
 
-        list = new LinkedList[6];
+        list = new LinkedList[9];
         visible = new boolean[n][m];
         for (int i = 0; i < list.length; i++)
             list[i] = new LinkedList<>();
